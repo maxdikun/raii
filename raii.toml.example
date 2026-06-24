@@ -1,0 +1,13 @@
+# Optional: explicit session name. If omitted, the directory containing
+# this config file is used as the session identifier.
+session = "my-project"
+
+[commands]
+# Command to start resources (run only if check fails and no owners exist)
+start = "docker compose up -d"
+
+# Command to stop resources (run when the last owner exits)
+stop = "docker compose down"
+
+# Command to check if resources are already running (exit 0 = running)
+check = "docker compose ps | grep -q Up"
