@@ -10,19 +10,20 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "Usage: raii <start|stop|check|watch> [flags]")
+		fmt.Fprintln(os.Stderr, "Usage: raii <start|stop|check|watch|init> [flags]")
 		os.Exit(1)
 	}
 
 	cmd := os.Args[1]
 	if cmd == "-h" || cmd == "--help" || cmd == "help" {
-		fmt.Println("Usage: raii <start|stop|check|watch> [flags]")
-		fmt.Println("")
-		fmt.Println("Commands:")
-		fmt.Println("  start   Start resources and register owner")
-		fmt.Println("  stop    Unregister owner and stop resources if no owners remain")
-		fmt.Println("  check   Run the check command")
-		fmt.Println("  watch   Watch an owner PID and stop when it dies")
+	fmt.Println("Usage: raii <start|stop|check|watch|init> [flags]")
+	fmt.Println("")
+	fmt.Println("Commands:")
+	fmt.Println("  start   Start resources and register owner")
+	fmt.Println("  stop    Unregister owner and stop resources if no owners remain")
+	fmt.Println("  check   Run the check command")
+	fmt.Println("  watch   Watch an owner PID and stop when it dies")
+	fmt.Println("  init    Create an empty raii.toml config file")
 		fmt.Println("")
 		fmt.Println("Flags:")
 		fmt.Println("  --config string   Path to config file (default \"raii.toml\")")
@@ -54,6 +55,8 @@ func main() {
 		err = internal.Check(configPath)
 	case "watch":
 		err = internal.Watch(configPath, owner)
+	case "init":
+		err = internal.Init(configPath)
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", cmd)
 		os.Exit(1)

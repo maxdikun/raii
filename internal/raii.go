@@ -128,6 +128,27 @@ func Watch(configPath, owner string) error {
 	return cmd.Run()
 }
 
+func Init(configPath string) error {
+	if configPath == "" {
+		configPath = "raii.toml"
+	}
+
+	if _, err := os.Stat(configPath); err == nil {
+		return fmt.Errorf("config file already exists: %s", configPath)
+	}
+
+	content := `# raii config
+# session = "my-project"
+
+[commands]
+# start = "docker compose up -d"
+# stop  = "docker compose down"
+# check = "docker compose ps | grep -q Up"
+`
+
+	return os.WriteFile(configPath, []byte(content), 0644)
+}
+
 func spawnWatchdog(configPath, owner string) {
 	devNull, err := os.OpenFile(os.DevNull, os.O_RDWR, 0)
 	if err != nil {
